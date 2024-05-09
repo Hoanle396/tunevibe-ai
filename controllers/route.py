@@ -3,8 +3,9 @@ from flask import request
 from flask_cors import cross_origin
 from flask_reuploads import AUDIO, UploadSet, configure_uploads
 import assemblyai as aai
+from app import settings
 
-aai.settings.api_key = os.getenv("API_KEY","")
+aai.settings.api_key = settings.API_KEY
 
 
 def registryRouter(app, model):
@@ -12,7 +13,6 @@ def registryRouter(app, model):
 
     app.config['UPLOADED_FILES_DEST'] = './audio'
     configure_uploads(app, wavaudio)
-
 
     @app.route("/api/predict", methods=["POST"])
     def Audio2Text():
