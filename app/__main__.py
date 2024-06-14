@@ -1,9 +1,9 @@
 from app import app
 import app.settings as settings
 from controllers.route import registryRouter
-from model.audio2text import Audio2Text
+from model.recommend import Recommend
 
-model = Audio2Text()
+model = Recommend()
 
 if __name__ == "__main__":
     registryRouter(app, model)

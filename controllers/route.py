@@ -1,6 +1,5 @@
 import os
 from flask import request
-from flask_cors import cross_origin
 from flask_reuploads import AUDIO, UploadSet, configure_uploads
 import assemblyai as aai
 from app import settings
@@ -26,4 +25,17 @@ def registryRouter(app, model):
             return {"status":"success","data":"Could not detect lyrics"},400
         finally:
             os.remove(audio)
+
+    @app.route("/api/recommend", methods=["POST"])
+    def recommend():
+        try:
+            userId= request.json["userId"]
+            transcript = model.predict()
+            transcript = transcript[(transcript["userId"]==int(userId))]
+            result = transcript[(transcript["prediction"]>3.5)].to_dict(orient="records")
+            return {"status":"success","data":result,"no":transcript.to_dict(orient="records")},200
+        except Exception as e:
+            print(e)
+            return {"status":"success","data":"Could not detect lyrics"},400
+        
         
